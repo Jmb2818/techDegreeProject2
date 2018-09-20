@@ -13,68 +13,46 @@ import AudioToolbox
 class ViewController: UIViewController {
     
     // MARK: - Properties
-    
-    let questionsPerRound = 4
-    var questionsAsked = 0
-    var correctQuestions = 0
-    var indexOfSelectedQuestion = 0
-    
-    var gameSound: SystemSoundID = 0
-    
-    let trivia: [[String : String]] = [
-        ["Question": "Only female koalas can whistle", "Answer": "False"],
-        ["Question": "Blue whales are technically whales", "Answer": "True"],
-        ["Question": "Camels are cannibalistic", "Answer": "False"],
-        ["Question": "All ducks are birds", "Answer": "True"]
-    ]
+    var quizManager = QuizManager()
     
     // MARK: - Outlets
     
     @IBOutlet weak var questionField: UILabel!
-    @IBOutlet weak var trueButton: UIButton!
-    @IBOutlet weak var falseButton: UIButton!
     @IBOutlet weak var playAgainButton: UIButton!
-
+    
+    @IBOutlet weak var option1: UIButton!
+    @IBOutlet weak var option2: UIButton!
+    @IBOutlet weak var option3: UIButton!
+    @IBOutlet weak var option4: UIButton!
+    @IBOutlet weak var stackView: UIStackView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadGameStartSound()
-        playGameStartSound()
+        quizManager.startGame()
         displayQuestion()
     }
     
     // MARK: - Helpers
     
-    func loadGameStartSound() {
-        let path = Bundle.main.path(forResource: "GameSound", ofType: "wav")
-        let soundUrl = URL(fileURLWithPath: path!)
-        AudioServicesCreateSystemSoundID(soundUrl as CFURL, &gameSound)
-    }
-    
-    func playGameStartSound() {
-        AudioServicesPlaySystemSound(gameSound)
-    }
-    
     func displayQuestion() {
-        indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextInt(upperBound: trivia.count)
-        let questionDictionary = trivia[indexOfSelectedQuestion]
-        questionField.text = questionDictionary["Question"]
-        playAgainButton.isHidden = true
+        let question = quizManager.getQuestion()
+        questionField.text = question.question
+        layoutButtons(with: question.answers, into: stackView)
+        
+        //TODO: Move this to quizmanager at the end of the getQuestion()
+        quizManager.correctAnswer = question.correctAnswer
     }
     
     func displayScore() {
-        // Hide the answer uttons
-        trueButton.isHidden = true
-        falseButton.isHidden = true
-        
         // Display play again button
-        playAgainButton.isHidden = false
+        layoutButtons(with: ["Play Again"], into: stackView)
         
-        questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(questionsPerRound) correct!"
+        questionField.text = "Way to go!\nYou got \(quizManager.correctQuestions) out of \(quizManager.questionsPerRound) correct!"
     }
     
     func nextRound() {
-        if questionsAsked == questionsPerRound {
+        if quizManager.questionsAsked == quizManager.questionsPerRound {
             // Game is over
             displayScore()
         } else {
@@ -95,36 +73,70 @@ class ViewController: UIViewController {
         }
     }
     
+    private func layoutButtons(with array: [String], into stackView: UIStackView) {
+        // Remove any buttons that may already be in the stack view from the last round
+        if !stackView.subviews.isEmpty {
+            for view in stackView.subviews {
+                view.removeFromSuperview()
+            }
+        }
+        // For each answer add a button, if play again button then only present that button
+        for answer in array {
+            if answer == "Play Again" {
+                let button = UIButton()
+                button.backgroundColor = .black
+                button.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+                button.widthAnchor.constraint(equalToConstant: stackView.frame.width - 20.0)
+                button.setTitle(answer, for: .normal)
+                button.addTarget(self, action: #selector(playAgain), for: .touchUpInside)
+                stackView.addArrangedSubview(button)
+            } else {
+                let button = UIButton()
+                button.backgroundColor = .black
+                button.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+                button.widthAnchor.constraint(equalToConstant: stackView.frame.width - 20.0)
+                button.setTitle(answer, for: .normal)
+                button.addTarget(self, action: #selector(verifyAnswer), for: .touchUpInside)
+                stackView.addArrangedSubview(button)
+            }
+        }
+        
+    }
+    
     // MARK: - Actions
     
-    @IBAction func checkAnswer(_ sender: UIButton) {
-        // Increment the questions asked counter
-        questionsAsked += 1
+    @objc func verifyAnswer(_ sender: UIButton) {
+        guard let selectedAnswer = sender.currentTitle else {
+            fatalError()
+        }
         
-        let selectedQuestionDict = trivia[indexOfSelectedQuestion]
-        let correctAnswer = selectedQuestionDict["Answer"]
-        
-        if (sender === trueButton &&  correctAnswer == "True") || (sender === falseButton && correctAnswer == "False") {
-            correctQuestions += 1
+        if quizManager.checkAnswer(selectedAnswer) {
+            
             questionField.text = "Correct!"
+            sender.backgroundColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)
         } else {
-            questionField.text = "Sorry, wrong answer!"
+            questionField.text = """
+            Sorry, wrong answer!
+            The correct answer is \(quizManager.correctAnswer).
+            """
+            sender.backgroundColor = #colorLiteral(red: 0.7179965102, green: 0.194347001, blue: 0.2058225411, alpha: 1)
+            for view in stackView.subviews {
+                if let button = view as? UIButton {
+                    if button.currentTitle == quizManager.correctAnswer {
+                        button.backgroundColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)
+                    }
+                }
+            }
         }
         
         loadNextRound(delay: 2)
     }
     
-    
-    @IBAction func playAgain(_ sender: UIButton) {
-        // Show the answer buttons
-        trueButton.isHidden = false
-        falseButton.isHidden = false
-        
-        questionsAsked = 0
-        correctQuestions = 0
+    @objc func playAgain() {
+        quizManager.resetGame()
         nextRound()
     }
     
-
+    
 }
 

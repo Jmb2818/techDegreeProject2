@@ -8,10 +8,6 @@
 
 import Foundation
 
-enum Keys: String {
-    case question, answers, correctAnswer
-}
-
 struct Quiz {
     var questions:[Question] = []
 }
