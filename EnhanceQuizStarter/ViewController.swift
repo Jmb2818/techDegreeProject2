@@ -13,7 +13,13 @@ import AudioToolbox
 class ViewController: UIViewController {
     
     // MARK: - Properties
+    // TODO: Move these to something like UserStrings
     var quizManager = QuizManager()
+    private var playAgainArray = ["Play Again"]
+    private var initialSetupArray = ["Normal Mode", "Lightning Mode"]
+    private var quizWelcome = "Welcome to Quizzer. This is a fun quiz game centered around 15 science facts. Please choose how you would like to play the game. Normal Mode has no time limit. Lightning mode is limited to 15 seconds per question."
+    private var welcomeBack = "Welcome Back"
+    private var normalModeName = "Normal Mode"
     
     // MARK: - Outlets
     
@@ -23,9 +29,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        quizManager.loadGameStartSound()
-        quizManager.startGame()
-        displayQuestion()
+        initialSetup(title: quizWelcome)
+//        displayQuestion()
     }
     
     // MARK: - Helpers
@@ -42,9 +47,18 @@ class ViewController: UIViewController {
     
     func displayScore() {
         // Display play again button
-        layoutButtons(with: ["Play Again"], into: stackView, for: .playAgain)
+        layoutButtons(with: playAgainArray, into: stackView, for: .playAgain)
         
         questionField.text = "Way to go!\nYou got \(quizManager.correctQuestions) out of \(quizManager.questionsPerRound) correct!"
+    }
+    
+    func initialSetup(title: String) {
+        // load everything up
+        quizManager.loadGameStartSound()
+        quizManager.startGame()
+        // Display initial buttons to start game in specific round type
+        layoutButtons(with: initialSetupArray, into: stackView, for: .initialSetup)
+        questionField.text = title
     }
     
     func nextRound() {
@@ -90,6 +104,15 @@ class ViewController: UIViewController {
                 let button = GameButton(title: answer, view: stackView)
                 button.addTarget(self, action: #selector(playAgain), for: .touchUpInside)
                 stackView.addArrangedSubview(button)
+            case .initialSetup:
+                let button = GameButton(title: answer, view: stackView)
+                if answer == normalModeName {
+                    button.addTarget(self, action: #selector(normalMode), for: .touchUpInside)
+                } else {
+                    button.addTarget(self, action: #selector(lightningMode), for: .touchUpInside)
+                }
+                stackView.addArrangedSubview(button)
+                
             }
         }
     }
@@ -123,11 +146,16 @@ class ViewController: UIViewController {
         loadNextRound(delay: 2)
     }
     
-    @objc func playAgain() {
-        quizManager.startGame()
+    @objc func lightningMode() {
+    
+    }
+    
+    @objc func normalMode() {
         nextRound()
     }
     
-    
+    @objc func playAgain() {
+        initialSetup(title: welcomeBack)
+    }
 }
 

@@ -15,7 +15,7 @@ enum Keys: String {
 }
 
 enum QuizSection {
-    case startRegular, startLightning, playAgain
+    case startRegular, startLightning, playAgain, initialSetup
 }
 
 class QuizManager {
