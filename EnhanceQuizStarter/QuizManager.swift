@@ -15,14 +15,14 @@ enum Keys: String {
 }
 
 enum QuizSection {
-    case startRegular, startLightning, playAgain, initialSetup
+    case startGame, playAgain, initialSetup
 }
 
 class QuizManager {
     
     // MARK: - Properties
     
-    let questionsPerRound = 2
+    let questionsPerRound = 5
     var questionsAsked = 0
     var correctQuestions = 0
     var indexOfSelectedQuestion = 0
@@ -32,6 +32,7 @@ class QuizManager {
     var gameCorrectSound: SystemSoundID = 1
     var gameIncorrectSound: SystemSoundID = 2
     var correctAnswer = ""
+    var secondsPerRound = 15
     
     // MARK: Initializers
     
@@ -95,14 +96,15 @@ class QuizManager {
                 let question = quiz.questions[selectedQuestionIndex]
                 chosenQuestions.append(selectedQuestionIndex)
                 foundNewQuestion = true
+                // Increment the questions asked counter
+                questionsAsked += 1
                 return question
             }
         }
     }
     
     @objc func checkAnswer(_ answer: String) -> Bool {
-        // Increment the questions asked counter
-        questionsAsked += 1
+
         if answer == correctAnswer {
             correctQuestions += 1
             playCorrectAnswerSound()
