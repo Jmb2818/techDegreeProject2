@@ -14,6 +14,10 @@ enum Keys: String {
     case question, answers, correctAnswer
 }
 
+enum QuizSection {
+    case startRegular, startLightning, playAgain
+}
+
 class QuizManager {
     
     // MARK: - Properties
@@ -24,7 +28,9 @@ class QuizManager {
     var indexOfSelectedQuestion = 0
     var quiz = Quiz()
     var chosenQuestions: [Int] = []
-    var gameSound: SystemSoundID = 0
+    var gameStartSound: SystemSoundID = 0
+    var gameCorrectSound: SystemSoundID = 1
+    var gameIncorrectSound: SystemSoundID = 2
     var correctAnswer = ""
     
     // MARK: Initializers
@@ -39,6 +45,7 @@ class QuizManager {
             }
             let question = Question(question: questionAsked, answers: answers, correctAnswer: correctAnswer)
             quiz.questions.append(question)
+            quiz.questions.shuffle()
         }
     }
     
@@ -49,20 +56,34 @@ class QuizManager {
     // MARK: - Functions
     
     func loadGameStartSound() {
-        let path = Bundle.main.path(forResource: "GameSound", ofType: "wav")
-        let soundUrl = URL(fileURLWithPath: path!)
-        AudioServicesCreateSystemSoundID(soundUrl as CFURL, &gameSound)
+        let startSoundPath = Bundle.main.path(forResource: "GameSound", ofType: "wav")
+        let startSoundUrl = URL(fileURLWithPath: startSoundPath!)
+        AudioServicesCreateSystemSoundID(startSoundUrl as CFURL, &gameStartSound)
+        
+        let correctSoundPath = Bundle.main.path(forResource: "magicChime", ofType: "wav")
+        let correctSoundUrl = URL(fileURLWithPath: correctSoundPath!)
+        AudioServicesCreateSystemSoundID(correctSoundUrl as CFURL, &gameCorrectSound)
+        
+        let incorrectSoundPath = Bundle.main.path(forResource: "metalTwing", ofType: "wav")
+        let incorrectSoundUrl = URL(fileURLWithPath: incorrectSoundPath!)
+        AudioServicesCreateSystemSoundID(incorrectSoundUrl as CFURL, &gameIncorrectSound)
     }
     
     func playGameStartSound() {
-        AudioServicesPlaySystemSound(gameSound)
+        AudioServicesPlaySystemSound(gameStartSound)
+    }
+    
+    func playCorrectAnswerSound() {
+        AudioServicesPlaySystemSound(gameCorrectSound)
+    }
+    func playIncorrectAnswerSound() {
+        AudioServicesPlaySystemSound(gameIncorrectSound)
     }
     
     func startGame() {
         questionsAsked = 0
         correctQuestions = 0
         chosenQuestions = []
-        loadGameStartSound()
         playGameStartSound()
     }
     
@@ -84,8 +105,10 @@ class QuizManager {
         questionsAsked += 1
         if answer == correctAnswer {
             correctQuestions += 1
+            playCorrectAnswerSound()
             return true
         } else {
+            playIncorrectAnswerSound()
             return false
         }
     }

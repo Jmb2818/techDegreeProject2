@@ -22,7 +22,8 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
+        quizManager.loadGameStartSound()
         quizManager.startGame()
         displayQuestion()
     }
@@ -32,7 +33,8 @@ class ViewController: UIViewController {
     func displayQuestion() {
         let question = quizManager.getQuestion()
         questionField.text = question.question
-        layoutButtons(with: question.answers, into: stackView)
+        let questionArray = question.answers.shuffled()
+        layoutButtons(with: questionArray, into: stackView, for: .startRegular)
         
         //TODO: Move this to quizmanager at the end of the getQuestion()
         quizManager.correctAnswer = question.correctAnswer
@@ -40,7 +42,7 @@ class ViewController: UIViewController {
     
     func displayScore() {
         // Display play again button
-        layoutButtons(with: ["Play Again"], into: stackView)
+        layoutButtons(with: ["Play Again"], into: stackView, for: .playAgain)
         
         questionField.text = "Way to go!\nYou got \(quizManager.correctQuestions) out of \(quizManager.questionsPerRound) correct!"
     }
@@ -67,26 +69,29 @@ class ViewController: UIViewController {
         }
     }
     
-    private func layoutButtons(with array: [String], into stackView: UIStackView) {
+    private func layoutButtons(with array: [String], into stackView: UIStackView, for section: QuizSection) {
         // Remove any buttons that may already be in the stack view from the last round
         if !stackView.subviews.isEmpty {
             for view in stackView.subviews {
                 view.removeFromSuperview()
             }
         }
-        // For each answer add a button, if play again button then only present that button
+        // For each answer add a button, if play again button then only present that button based on what
+        // section of the quiz we are in
         for answer in array {
-            if answer == "Play Again" {
-                let button = GameButton(title: answer, view: stackView)
-                button.addTarget(self, action: #selector(playAgain), for: .touchUpInside)
-                stackView.addArrangedSubview(button)
-            } else {
+            switch section {
+            case .startRegular:
                 let button = GameButton(title: answer, view: stackView)
                 button.addTarget(self, action: #selector(verifyAnswer), for: .touchUpInside)
                 stackView.addArrangedSubview(button)
+            case .startLightning:
+                break
+            case .playAgain:
+                let button = GameButton(title: answer, view: stackView)
+                button.addTarget(self, action: #selector(playAgain), for: .touchUpInside)
+                stackView.addArrangedSubview(button)
             }
         }
-        
     }
     
     // MARK: - Actions
