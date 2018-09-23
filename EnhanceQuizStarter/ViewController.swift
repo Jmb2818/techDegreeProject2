@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import GameKit
-import AudioToolbox
 
 class ViewController: UIViewController {
     
@@ -17,7 +15,7 @@ class ViewController: UIViewController {
     // TODO: Move these to something like UserStrings
     private var playAgainArray = ["Play Again"]
     private var initialSetupArray = ["Normal Mode", "Lightning Mode"]
-    private var quizWelcome = "Welcome to Quizzer. Choose a mode. Lightning mode is limited to 15 seconds per question."
+    private var quizWelcome = "Welcome to Quizzer. Choose a mode."
     private var welcomeBack = "Welcome Back"
     private var normalModeName = "Normal Mode"
     var timer = Timer()
@@ -30,6 +28,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var questionField: UILabel!
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var countdownTimerLabel: UILabel!
+    @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var questionCorrectLabel: UILabel!
     
     override func viewDidLoad() {
@@ -53,6 +52,7 @@ class ViewController: UIViewController {
     func displayScore() {
         // Display play again button
         layoutButtons(with: playAgainArray, into: stackView, for: .playAgain)
+        timerLabel.isHidden = true
         
         questionField.text = "Way to go!\nYou got \(quizManager.correctQuestions) out of \(quizManager.questionsPerRound) correct!"
     }
@@ -65,7 +65,8 @@ class ViewController: UIViewController {
         layoutButtons(with: initialSetupArray, into: stackView, for: .initialSetup)
         questionField.text = title
         countdownTimerLabel.isHidden = true
-        questionCorrectLabel.isHidden = true
+        questionCorrectLabel.text = "Lightning mode is limited to 15 seconds per question."
+        timerLabel.isHidden = true
     }
     
     @objc func nextRound() {
@@ -77,6 +78,7 @@ class ViewController: UIViewController {
             // Check if lightnining mode is on and if so then start the timer
             if isLightningModeOn {
                 countdownTimerLabel.isHidden = false
+                timerLabel.isHidden = false
                 runTimer()
                 displayQuestion(for: .startGame)
             } else {
@@ -134,7 +136,7 @@ class ViewController: UIViewController {
     }
     func createNextQuestionButton() {
         let button = GameButton(title: "Next Question", view: stackView)
-        button.backgroundColor = #colorLiteral(red: 0.3647058904, green: 0.06666667014, blue: 0.9686274529, alpha: 1)
+        button.backgroundColor = #colorLiteral(red: 0, green: 0.5921568627, blue: 0.4352941176, alpha: 1)
         button.addTarget(self, action: #selector(nextRound), for: .touchUpInside)
         stackView.addArrangedSubview(button)
     }
@@ -146,6 +148,7 @@ class ViewController: UIViewController {
         for view in stackView.subviews {
             if let button = view as? UIButton {
                 button.isEnabled = false
+                button.alpha = 0.60
             }
         }
     }
@@ -157,22 +160,23 @@ class ViewController: UIViewController {
             fatalError()
         }
         
-        timer.invalidate()
-        countdownTimer.invalidate()
-        questionCorrectLabel.text = ""
-        questionCorrectLabel.isHidden = false
-        // TODO: EndRound
+        endRound()
         
         if quizManager.checkAnswer(selectedAnswer) {
             questionCorrectLabel.text = "Correct!"
+            questionCorrectLabel.textColor = #colorLiteral(red: 0, green: 0.537254902, blue: 0.3960784314, alpha: 1)
             sender.backgroundColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)
+            sender.alpha = 1.0
         } else {
             questionCorrectLabel.text = "Sorry, that's not it."
+            questionCorrectLabel.textColor = #colorLiteral(red: 1, green: 0.6156862745, blue: 0.2745098039, alpha: 1)
             sender.backgroundColor = #colorLiteral(red: 0.7179965102, green: 0.194347001, blue: 0.2058225411, alpha: 1)
+            sender.alpha = 1.0
             for view in stackView.subviews {
                 if let button = view as? UIButton {
                     if button.currentTitle == quizManager.correctAnswer {
                         button.backgroundColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)
+                        button.alpha = 1.0
                     }
                 }
             }
