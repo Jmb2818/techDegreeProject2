@@ -59,6 +59,9 @@ class QuizManager {
     }
     
     func startGame() {
+        questionsAsked = 0
+        correctQuestions = 0
+        chosenQuestions = []
         loadGameStartSound()
         playGameStartSound()
     }
@@ -87,12 +90,6 @@ class QuizManager {
         }
     }
     
-    func resetGame() {
-        questionsAsked = 0
-        correctQuestions = 0
-        chosenQuestions = []
-    }
-    
 }
 
 
@@ -100,28 +97,48 @@ class QuizManager {
 
 let questionDictionary = [
     [
-        "question" : "What house did Harry tell the hat he did not want to be in?",
-        "answers" : ["Ravenclaw","Slytherin", "Gryffindor", "Hufflepuff"],
-        "correctAnswer" : "Slytherin"
+        "question" : "In an entire lifetime, the average person walks the equivalent of how many times around the world?",
+        "answers" : ["Four", "Ten", "Five"],
+        "correctAnswer" : "Five"
     ],
     [
-        "question" : "What did the Weasley Twins try to send Harry as a get well present at the end of The Sorcerer's Stone?",
-        "answers" : ["A deck of cards","Bertie Bots", "A toilet seat", "A hinkypunk"],
-        "correctAnswer" : "A toilet seat"
+        "question" : "What color is oxygen when it is not a gas?",
+        "answers" : ["Brown","Pale Green", "Light Blue", "Hot Pink"],
+        "correctAnswer" : "Light Blue"
     ],
     [
-        "question" : "Who hand made socks for Harry for Christmas?",
-        "answers" : ["Mrs. Weasley","Dobby", "Hermione", "Professor Mcgonagall"],
-        "correctAnswer" : "Dobby"
+        "question" : "How does it take one blood cell to circulate the whole body one time?",
+        "answers" : ["25 Seconds","60 Seconds", "2 Minutes", "5 Minutes"],
+        "correctAnswer" : "60 Seconds"
     ],
     [
-        "question" : "Who has an otter patronous?",
-        "answers" : ["Kingsley Shacklebolt","Harry Potter", "Luna Lovegood", "Neville Longbottom"],
-        "correctAnswer" : "Kingsley Shacklebolt"
+        "question" : "How many bones in the human body?",
+        "answers" : ["300","187", "265", "206"],
+        "correctAnswer" : "206"
     ],
     [
-        "question" : "Who did Harry pretend to be when first getting on the Kinght's Bus?",
-        "answers" : ["Ron Weasley","Neville Longbottom", "Draco Malfoy", "Oliver Wood"],
-        "correctAnswer" : "Neville Longbottom"
+        "question" : "How often does your skin replace itself in an average lifetime??",
+        "answers" : ["50 Times","900 Times", "2 Million Times", "200 Times"],
+        "correctAnswer" : "900 Times"
+    ],
+    [
+        "question" : "Which planet has the most moons?",
+        "answers" : ["Pluto","Mars", "Jupiter", "Saturn"],
+        "correctAnswer" : "Jupiter"
+    ],
+    [
+        "question" : "If you mix all light colours, what color do you get?",
+        "answers" : ["Black","White", "Rainbow", "Purple"],
+        "correctAnswer" : "White"
+    ],
+    [
+        "question" : "What survives impacting Earth’s surface?",
+        "answers" : ["Meteor","Meteorite", "Asteroid"],
+        "correctAnswer" : "Meteorite"
+    ],
+    [
+        "question" : "Which planet is the fastest?",
+        "answers" : ["Jupiter","Venus", "Mercury", "Uranus"],
+        "correctAnswer" : "Jupiter"
     ]
 ]

@@ -18,12 +18,6 @@ class ViewController: UIViewController {
     // MARK: - Outlets
     
     @IBOutlet weak var questionField: UILabel!
-    @IBOutlet weak var playAgainButton: UIButton!
-    
-    @IBOutlet weak var option1: UIButton!
-    @IBOutlet weak var option2: UIButton!
-    @IBOutlet weak var option3: UIButton!
-    @IBOutlet weak var option4: UIButton!
     @IBOutlet weak var stackView: UIStackView!
     
     override func viewDidLoad() {
@@ -83,19 +77,11 @@ class ViewController: UIViewController {
         // For each answer add a button, if play again button then only present that button
         for answer in array {
             if answer == "Play Again" {
-                let button = UIButton()
-                button.backgroundColor = .black
-                button.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
-                button.widthAnchor.constraint(equalToConstant: stackView.frame.width - 20.0)
-                button.setTitle(answer, for: .normal)
+                let button = GameButton(title: answer, view: stackView)
                 button.addTarget(self, action: #selector(playAgain), for: .touchUpInside)
                 stackView.addArrangedSubview(button)
             } else {
-                let button = UIButton()
-                button.backgroundColor = .black
-                button.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
-                button.widthAnchor.constraint(equalToConstant: stackView.frame.width - 20.0)
-                button.setTitle(answer, for: .normal)
+                let button = GameButton(title: answer, view: stackView)
                 button.addTarget(self, action: #selector(verifyAnswer), for: .touchUpInside)
                 stackView.addArrangedSubview(button)
             }
@@ -133,7 +119,7 @@ class ViewController: UIViewController {
     }
     
     @objc func playAgain() {
-        quizManager.resetGame()
+        quizManager.startGame()
         nextRound()
     }
     
