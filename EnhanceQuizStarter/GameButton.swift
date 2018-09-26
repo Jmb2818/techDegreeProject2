@@ -22,7 +22,7 @@ class GameButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 0.4705882353, alpha: 1)
+        backgroundColor = #colorLiteral(red: 0, green: 0.4705882353, blue: 0.5910003064, alpha: 1)
         tintColor = .white
         layer.cornerRadius = 15.0
     }
