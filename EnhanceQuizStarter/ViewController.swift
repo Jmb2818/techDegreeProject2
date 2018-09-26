@@ -12,13 +12,7 @@ class ViewController: UIViewController {
     
     // MARK: - Properties
     var quizManager = QuizManager()
-    // TODO: Move these to something like UserStrings
-    private var playAgainArray = ["Play Again"]
-    private var initialSetupArray = ["Normal Mode", "Lightning Mode"]
-    private var quizWelcome = "Welcome to Quizzer. Choose a mode."
-    private var welcomeBack = "Welcome Back"
-    private var normalModeName = "Normal Mode"
-    var timer = Timer()
+    var roundTimer = Timer()
     var countdownTimer = Timer()
     var countdownSeconds = 15
     var isLightningModeOn = false
@@ -34,7 +28,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        initialSetup(title: quizWelcome)
+        initialSetup(title: UserStrings.General.quizWelcome)
     }
     
     // MARK: - Helpers
@@ -51,7 +45,7 @@ class ViewController: UIViewController {
     
     func displayScore() {
         // Display play again button
-        layoutButtons(with: playAgainArray, into: stackView, for: .playAgain)
+        layoutButtons(with: UserStrings.General.playAgainArray, into: stackView, for: .playAgain)
         timerLabel.isHidden = true
         
         questionField.text = "Way to go!\nYou got \(quizManager.correctQuestions) out of \(quizManager.questionsPerRound) correct!"
@@ -62,11 +56,12 @@ class ViewController: UIViewController {
         quizManager.loadGameStartSound()
         quizManager.startGame()
         // Display initial buttons to start game in specific round type
-        layoutButtons(with: initialSetupArray, into: stackView, for: .initialSetup)
+        layoutButtons(with: UserStrings.General.initialSetupArray, into: stackView, for: .initialSetup)
         questionField.text = title
         countdownTimerLabel.isHidden = true
-        questionCorrectLabel.text = "Lightning mode is limited to 15 seconds per question."
+        questionCorrectLabel.text = UserStrings.General.lightningModeInfo
         timerLabel.isHidden = true
+        isLightningModeOn = false
     }
     
     @objc func nextRound() {
@@ -88,7 +83,7 @@ class ViewController: UIViewController {
         }
     }
     
-    private func layoutButtons(with array: [String], into stackView: UIStackView, for section: QuizSection) {
+    func layoutButtons(with array: [String], into stackView: UIStackView, for section: QuizSection) {
         // Remove any buttons that may already be in the stack view from the last round
         if !stackView.subviews.isEmpty {
             for view in stackView.subviews {
@@ -110,7 +105,7 @@ class ViewController: UIViewController {
                 stackView.addArrangedSubview(button)
             case .initialSetup:
                 let button = GameButton(title: answer, view: stackView)
-                if answer == normalModeName {
+                if answer == UserStrings.General.normalModeName {
                     button.addTarget(self, action: #selector(normalMode), for: .touchUpInside)
                 } else {
                     button.addTarget(self, action: #selector(lightningMode), for: .touchUpInside)
@@ -123,25 +118,25 @@ class ViewController: UIViewController {
     
     func runTimer() {
         
-        timer = Timer.scheduledTimer(timeInterval: Double(quizManager.secondsPerRound), target: self, selector: #selector(ViewController.nextRound), userInfo: nil, repeats: true)
+        roundTimer = Timer.scheduledTimer(timeInterval: Double(quizManager.secondsPerRound), target: self, selector: #selector(ViewController.nextRound), userInfo: nil, repeats: true)
         countdownTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(displayCountdown), userInfo: nil, repeats: true)
     }
     
     func beginRound() {
-        timer.invalidate()
+        roundTimer.invalidate()
         countdownTimer.invalidate()
         countdownSeconds = quizManager.secondsPerRound
         countdownTimerLabel.text = "\(quizManager.secondsPerRound)"
         questionCorrectLabel.isHidden = true
     }
     func createNextQuestionButton() {
-        let button = GameButton(title: "Next Question", view: stackView)
+        let button = GameButton(title: UserStrings.General.nextQuestion, view: stackView)
         button.backgroundColor = #colorLiteral(red: 0, green: 0.5921568627, blue: 0.4352941176, alpha: 1)
         button.addTarget(self, action: #selector(nextRound), for: .touchUpInside)
         stackView.addArrangedSubview(button)
     }
     func endRound() {
-        timer.invalidate()
+        roundTimer.invalidate()
         countdownTimer.invalidate()
         questionCorrectLabel.text = ""
         questionCorrectLabel.isHidden = false
@@ -157,18 +152,19 @@ class ViewController: UIViewController {
     
     @objc func verifyAnswer(_ sender: UIButton) {
         guard let selectedAnswer = sender.currentTitle else {
+            // If the button does not have a title then crash
             fatalError()
         }
         
         endRound()
         
         if quizManager.checkAnswer(selectedAnswer) {
-            questionCorrectLabel.text = "Correct!"
+            questionCorrectLabel.text = UserStrings.General.correctAnswer
             questionCorrectLabel.textColor = #colorLiteral(red: 0, green: 0.537254902, blue: 0.3960784314, alpha: 1)
             sender.backgroundColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)
             sender.alpha = 1.0
         } else {
-            questionCorrectLabel.text = "Sorry, that's not it."
+            questionCorrectLabel.text = UserStrings.General.incorrectAnswer
             questionCorrectLabel.textColor = #colorLiteral(red: 1, green: 0.6156862745, blue: 0.2745098039, alpha: 1)
             sender.backgroundColor = #colorLiteral(red: 0.7179965102, green: 0.194347001, blue: 0.2058225411, alpha: 1)
             sender.alpha = 1.0
@@ -194,8 +190,7 @@ class ViewController: UIViewController {
     }
     
     @objc func playAgain() {
-        isLightningModeOn = false
-        initialSetup(title: welcomeBack)
+        initialSetup(title: UserStrings.General.playAgainSelect)
     }
     
     @objc func displayCountdown() {

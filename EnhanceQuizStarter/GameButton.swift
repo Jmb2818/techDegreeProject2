@@ -26,6 +26,6 @@ class GameButton: UIButton {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError()
+        fatalError() 
     }
 }

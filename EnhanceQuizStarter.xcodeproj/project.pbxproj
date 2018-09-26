@@ -10,6 +10,8 @@
 		0B037A38215096520057F443 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B037A37215096520057F443 /* Question.swift */; };
 		0B037A3A2150969E0057F443 /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B037A392150969E0057F443 /* Quiz.swift */; };
 		0B037A3C2150A7360057F443 /* QuizManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B037A3B2150A7360057F443 /* QuizManager.swift */; };
+		0B3629BB2159C5BD00D14719 /* SampleQuestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3629BA2159C5BD00D14719 /* SampleQuestions.swift */; };
+		0B3629BF2159D38E00D14719 /* UserStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3629BE2159D38E00D14719 /* UserStrings.swift */; };
 		0BCE05FC2157098400EF19E4 /* GameButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCE05FB2157098400EF19E4 /* GameButton.swift */; };
 		0BFCF0FB21572BA8007B05C4 /* metalTwing.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0BFCF0FA21572BA8007B05C4 /* metalTwing.wav */; };
 		0BFCF0FD21574F4C007B05C4 /* magicChime.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0BFCF0FC21574F4C007B05C4 /* magicChime.wav */; };
@@ -25,6 +27,8 @@
 		0B037A37215096520057F443 /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		0B037A392150969E0057F443 /* Quiz.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quiz.swift; sourceTree = "<group>"; };
 		0B037A3B2150A7360057F443 /* QuizManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizManager.swift; sourceTree = "<group>"; };
+		0B3629BA2159C5BD00D14719 /* SampleQuestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleQuestions.swift; sourceTree = "<group>"; };
+		0B3629BE2159D38E00D14719 /* UserStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStrings.swift; sourceTree = "<group>"; };
 		0BCE05FB2157098400EF19E4 /* GameButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameButton.swift; sourceTree = "<group>"; };
 		0BFCF0FA21572BA8007B05C4 /* metalTwing.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = metalTwing.wav; sourceTree = "<group>"; };
 		0BFCF0FC21574F4C007B05C4 /* magicChime.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = magicChime.wav; sourceTree = "<group>"; };
@@ -81,6 +85,8 @@
 				972A72C22056F0E40059EF4A /* GameSound.wav */,
 				0BFCF0FC21574F4C007B05C4 /* magicChime.wav */,
 				0BFCF0FA21572BA8007B05C4 /* metalTwing.wav */,
+				0B3629BA2159C5BD00D14719 /* SampleQuestions.swift */,
+				0B3629BE2159D38E00D14719 /* UserStrings.swift */,
 			);
 			path = EnhanceQuizStarter;
 			sourceTree = "<group>";
@@ -164,7 +170,9 @@
 				0B037A38215096520057F443 /* Question.swift in Sources */,
 				0BCE05FC2157098400EF19E4 /* GameButton.swift in Sources */,
 				972A72B32056F06C0059EF4A /* ViewController.swift in Sources */,
+				0B3629BB2159C5BD00D14719 /* SampleQuestions.swift in Sources */,
 				0B037A3C2150A7360057F443 /* QuizManager.swift in Sources */,
+				0B3629BF2159D38E00D14719 /* UserStrings.swift in Sources */,
 				0B037A3A2150969E0057F443 /* Quiz.swift in Sources */,
 				972A72B12056F06C0059EF4A /* AppDelegate.swift in Sources */,
 			);
