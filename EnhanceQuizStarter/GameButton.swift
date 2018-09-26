@@ -14,7 +14,7 @@ class GameButton: UIButton {
     
     convenience init(title: String, view: UIStackView) {
         self.init(frame: CGRect.zero)
-        self.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+        self.heightAnchor.constraint(equalToConstant: 55.0).isActive = true
         self.widthAnchor.constraint(equalToConstant: view.frame.width - 20.0)
         self.setTitle(title, for: .normal)
     }
