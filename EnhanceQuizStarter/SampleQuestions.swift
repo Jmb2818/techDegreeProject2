@@ -8,7 +8,9 @@
 
 import Foundation
 
-let sampleQuestionDictionary = [
+// Question Dictionary of type [String:Any] to pass into the initializer just like a jSON
+
+let questionDictionary = [
     [
         "question" : "In an entire lifetime, the average person walks the equivalent of how many times around the world?",
         "answers" : ["Four", "Ten", "Five"],
@@ -96,6 +98,16 @@ let sampleQuestionDictionary = [
     ],
     [
         "question" : "Mammoths still walked the Earth when the Great Pyramids were being built?",
+        "answers" : ["True", "False"],
+        "correctAnswer" : "True"
+    ],
+    [
+        "question" : "Head lice are arachnids (a type of spider), not insects.",
+        "answers" : ["True", "False"],
+        "correctAnswer" : "False"
+    ],
+    [
+        "question" : "There are more than 1 million identified species of insects.",
         "answers" : ["True", "False"],
         "correctAnswer" : "True"
     ]

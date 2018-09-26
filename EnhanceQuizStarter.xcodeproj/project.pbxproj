@@ -78,6 +78,8 @@
 				0B037A392150969E0057F443 /* Quiz.swift */,
 				0B037A3B2150A7360057F443 /* QuizManager.swift */,
 				0BCE05FB2157098400EF19E4 /* GameButton.swift */,
+				0B3629BA2159C5BD00D14719 /* SampleQuestions.swift */,
+				0B3629BE2159D38E00D14719 /* UserStrings.swift */,
 				972A72B42056F06C0059EF4A /* Main.storyboard */,
 				972A72B72056F06C0059EF4A /* Assets.xcassets */,
 				972A72B92056F06C0059EF4A /* LaunchScreen.storyboard */,
@@ -85,8 +87,6 @@
 				972A72C22056F0E40059EF4A /* GameSound.wav */,
 				0BFCF0FC21574F4C007B05C4 /* magicChime.wav */,
 				0BFCF0FA21572BA8007B05C4 /* metalTwing.wav */,
-				0B3629BA2159C5BD00D14719 /* SampleQuestions.swift */,
-				0B3629BE2159D38E00D14719 /* UserStrings.swift */,
 			);
 			path = EnhanceQuizStarter;
 			sourceTree = "<group>";

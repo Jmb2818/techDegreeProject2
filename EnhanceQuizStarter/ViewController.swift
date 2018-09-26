@@ -117,12 +117,14 @@ class ViewController: UIViewController {
     }
     
     func runTimer() {
-        
+        // Create timer for the round where if no choice is made before the time is up still display question
         roundTimer = Timer.scheduledTimer(timeInterval: Double(quizManager.secondsPerRound), target: self, selector: #selector(ViewController.nextRound), userInfo: nil, repeats: true)
+        // Create a timer to update the countdown timer
         countdownTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(displayCountdown), userInfo: nil, repeats: true)
     }
     
     func beginRound() {
+        // Stop all timers and reset the timer label along with hiding anything necessary
         roundTimer.invalidate()
         countdownTimer.invalidate()
         countdownSeconds = quizManager.secondsPerRound
@@ -130,12 +132,15 @@ class ViewController: UIViewController {
         questionCorrectLabel.isHidden = true
     }
     func createNextQuestionButton() {
+        // Create button to advance game after a choice allowing user to control flow
         let button = GameButton(title: UserStrings.General.nextQuestion, view: stackView)
         button.backgroundColor = #colorLiteral(red: 0, green: 0.5921568627, blue: 0.4352941176, alpha: 1)
         button.addTarget(self, action: #selector(nextRound), for: .touchUpInside)
         stackView.addArrangedSubview(button)
     }
     func endRound() {
+        // End all timers, reset and show answer correct label for result
+        // Blocks all interaction with buttons so it is impossible to keep making selections and dim the buttons
         roundTimer.invalidate()
         countdownTimer.invalidate()
         questionCorrectLabel.text = ""
@@ -159,11 +164,14 @@ class ViewController: UIViewController {
         endRound()
         
         if quizManager.checkAnswer(selectedAnswer) {
+            // If answer is correct turn that button green and do not dim it
             questionCorrectLabel.text = UserStrings.General.correctAnswer
             questionCorrectLabel.textColor = #colorLiteral(red: 0, green: 0.537254902, blue: 0.3960784314, alpha: 1)
             sender.backgroundColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)
             sender.alpha = 1.0
         } else {
+            // If answer is correct turn that button red and do not dim it
+            // Find button with the correct answer and turn it green
             questionCorrectLabel.text = UserStrings.General.incorrectAnswer
             questionCorrectLabel.textColor = #colorLiteral(red: 1, green: 0.6156862745, blue: 0.2745098039, alpha: 1)
             sender.backgroundColor = #colorLiteral(red: 0.7179965102, green: 0.194347001, blue: 0.2058225411, alpha: 1)
@@ -181,19 +189,23 @@ class ViewController: UIViewController {
     }
     
     @objc func lightningMode() {
+        // Turn lightning mode on since the user selected for it to be on
         isLightningModeOn = true
         nextRound()
     }
     
     @objc func normalMode() {
+        // Start game and display question
         nextRound()
     }
     
     @objc func playAgain() {
+        // Run initial set up to allow for mode selection again
         initialSetup(title: UserStrings.General.playAgainSelect)
     }
     
     @objc func displayCountdown() {
+        // Update countdown label every second to update user of time left
         countdownSeconds -= 1
         countdownTimerLabel.text = "\(countdownSeconds)"
     }

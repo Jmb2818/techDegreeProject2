@@ -8,6 +8,8 @@
 
 import Foundation
 
+// A class to hold all the strings used throughout the app to help with safety and mistakes
+
 class UserStrings {
     
     enum General {

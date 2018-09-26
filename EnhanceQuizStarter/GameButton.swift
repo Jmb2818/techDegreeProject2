@@ -10,6 +10,8 @@ import UIKit
 
 class GameButton: UIButton {
     
+    // Initialize game button for the stack view so they are all the same
+    
     convenience init(title: String, view: UIStackView) {
         self.init(frame: CGRect.zero)
         self.heightAnchor.constraint(equalToConstant: 50.0).isActive = true

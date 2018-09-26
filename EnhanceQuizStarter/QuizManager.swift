@@ -51,20 +51,22 @@ class QuizManager {
     }
     
     convenience init() {
-        self.init(dictionary: sampleQuestionDictionary)
+        self.init(dictionary: questionDictionary)
     }
     
     // MARK: - Functions
     
     func loadGameStartSound() {
+        //Create sound for game starting
         let startSoundPath = Bundle.main.path(forResource: "GameSound", ofType: "wav")
         let startSoundUrl = URL(fileURLWithPath: startSoundPath!)
         AudioServicesCreateSystemSoundID(startSoundUrl as CFURL, &gameStartSound)
         
+        //Create sound for correct question selection
         let correctSoundPath = Bundle.main.path(forResource: "magicChime", ofType: "wav")
         let correctSoundUrl = URL(fileURLWithPath: correctSoundPath!)
         AudioServicesCreateSystemSoundID(correctSoundUrl as CFURL, &gameCorrectSound)
-        
+        //Create sound for incorrect question selection
         let incorrectSoundPath = Bundle.main.path(forResource: "metalTwing", ofType: "wav")
         let incorrectSoundUrl = URL(fileURLWithPath: incorrectSoundPath!)
         AudioServicesCreateSystemSoundID(incorrectSoundUrl as CFURL, &gameIncorrectSound)
@@ -82,6 +84,7 @@ class QuizManager {
     }
     
     func startGame() {
+        // Reset everything if it is not already zero and play beginning sound
         questionsAsked = 0
         correctQuestions = 0
         chosenQuestions = []
@@ -89,6 +92,10 @@ class QuizManager {
     }
     
     func getQuestion() -> Question {
+        
+        // check to see if this questions index is in the selected question index array
+        // If so then pick another question, if not then add that index to the array and pass
+        // the question to the caller
         var foundNewQuestion = false
         while foundNewQuestion == false {
             let selectedQuestionIndex = GKRandomSource.sharedRandom().nextInt(upperBound: quiz.questions.count)
